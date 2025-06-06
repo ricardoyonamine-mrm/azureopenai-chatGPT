@@ -39,6 +39,12 @@ import { ChatHistoryPanel } from "../../components/ChatHistory/ChatHistoryPanel"
 import { AppStateContext } from "../../state/AppProvider";
 import { useBoolean } from "@fluentui/react-hooks";
 
+declare global {
+  interface Window {
+    dataLayer: any[];
+  }
+}
+
 const enum messageStatus {
   NotRunning = 'Not Running',
   Processing = 'Processing',
@@ -127,6 +133,14 @@ const Chat = () => {
       setShowAuthMessage(true)
     } else {
       setShowAuthMessage(false)
+      let userid: string
+      userid = userInfoList[0]?.user_claims.filter(claim => claim.typ === 'http://schemas.microsoft.com/identity/claims/objectidentifier')[0]?.val
+      if (userid) {
+        window.dataLayer?.push({
+          'event': 'login',
+          'userId': userid
+        });
+      }
     }
   }
 
@@ -769,7 +783,7 @@ const Chat = () => {
       // Optionally handle error
     }
   }
-  
+
   return (
     <div className={styles.container} role="main">
       {showAuthMessage ? (
@@ -920,6 +934,7 @@ const Chat = () => {
                     onClick={newChat}
                     disabled={disabledButton()}
                     aria-label="start a new chat button"
+                    title="Start a new chat"
                   />
                 )}
                 <CommandBarButton
@@ -953,6 +968,7 @@ const Chat = () => {
                   }
                   disabled={disabledButton()}
                   aria-label="clear chat button"
+                  title="Clear current chat"
                 />
                 <Dialog
                   hidden={hideErrorDialog}
