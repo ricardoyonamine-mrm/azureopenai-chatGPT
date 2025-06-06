@@ -42,6 +42,9 @@ export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend, conv
   };
 
   const sendQuestion = () => {
+    window.dataLayer?.push({
+      event: 'askQuestion',
+    })
     if (disabled || !question.trim()) {
       return
     }
