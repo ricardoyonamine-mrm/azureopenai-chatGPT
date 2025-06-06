@@ -128,6 +128,13 @@ const Chat = () => {
     } else {
       setShowAuthMessage(false)
       console.log('User info list:', userInfoList)
+      let userid: string;
+      userid = userInfoList[0]?.user_claims.filter(claim => claim.typ === 'http://schemas.microsoft.com/identity/claims/objectidentifier')[0]?.val
+      if (userid) {
+        pushToDataLayer({ 
+          'userId' : userid 
+        });
+      }
     }
   }
 
