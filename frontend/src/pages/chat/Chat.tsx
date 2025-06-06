@@ -39,6 +39,12 @@ import { ChatHistoryPanel } from "../../components/ChatHistory/ChatHistoryPanel"
 import { AppStateContext } from "../../state/AppProvider";
 import { useBoolean } from "@fluentui/react-hooks";
 
+declare global {
+  interface Window {
+    dataLayer: any[];
+  }
+}
+
 // A simplified implementation of the dataLayer object
 type TDataLayer = {
   push: (data: Record<string, unknown>) => void;
@@ -162,8 +168,8 @@ const Chat = () => {
       userid = userInfoList[0]?.user_claims.filter(claim => claim.typ === 'http://schemas.microsoft.com/identity/claims/objectidentifier')[0]?.val
       console.log('User ID:', userid)
       if (userid) {
-        pushToDataLayer({ 
-          'userId' : userid 
+        window.dataLayer?.push({
+          'userId': userid
         });
       }
     }
@@ -808,7 +814,7 @@ const Chat = () => {
       // Optionally handle error
     }
   }
-  
+
   return (
     <div className={styles.container} role="main">
       {showAuthMessage ? (
