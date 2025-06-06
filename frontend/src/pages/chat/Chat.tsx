@@ -127,6 +127,7 @@ const Chat = () => {
       setShowAuthMessage(true)
     } else {
       setShowAuthMessage(false)
+      console.log('User info list:', userInfoList)
     }
   }
 
